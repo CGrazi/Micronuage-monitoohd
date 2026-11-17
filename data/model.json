@@ -1,0 +1,45 @@
+{
+  "roles": [
+    {"id": "admin", "label": "Administrador"},
+    {"id": "tecnico", "label": "Técnico"},
+    {"id": "colaborador", "label": "Colaborador"}
+  ],
+  "auth": {"signup": "open", "default_role": "colaborador"},
+  "collections": [
+    {
+      "id": "chamados",
+      "label": "Chamados",
+      "label_singular": "Chamado",
+      "title_field": "titulo",
+      "owner_field": "solicitante",
+      "fields": [
+        {"id": "titulo", "label": "Título", "type": "text", "required": true},
+        {"id": "descricao", "label": "Descrição", "type": "long_text", "required": true},
+        {"id": "prioridade", "label": "Prioridade", "type": "select", "options": ["Baixa", "Média", "Alta", "Urgente"]},
+        {"id": "status", "label": "Status", "type": "select", "options": ["Aberto", "Em atendimento", "Resolvido"]},
+        {"id": "solicitante", "label": "Solicitante", "type": "user"},
+        {"id": "tecnico", "label": "Técnico responsável", "type": "user"}
+      ],
+      "permissions": {
+        "colaborador": {"read": "own", "create": true, "update": "none", "delete": "none"},
+        "tecnico": {"read": "all", "create": true, "update": "all", "delete": "none", "edit_fields": ["status", "tecnico"]}
+      }
+    },
+    {
+      "id": "comentarios",
+      "label": "Comentários",
+      "label_singular": "Comentário",
+      "owner_field": "solicitante",
+      "fields": [
+        {"id": "chamado", "label": "Chamado", "type": "reference", "collection": "chamados", "required": true},
+        {"id": "texto", "label": "Comentário", "type": "long_text", "required": true},
+        {"id": "autor", "label": "Autor", "type": "user"},
+        {"id": "solicitante", "label": "Solicitante do chamado", "type": "user"}
+      ],
+      "permissions": {
+        "colaborador": {"read": "own", "create": true, "update": "none", "delete": "none"},
+        "tecnico": {"read": "all", "create": true, "update": "none", "delete": "none"}
+      }
+    }
+  ]
+}
